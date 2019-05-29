@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  zyzhou0224.github.io
+  css - zyzhou0224.github.io
   
   </title>
   
@@ -135,54 +135,6 @@
                     <span>posted in&nbsp;</span> 
           				  
           					    <span class="posted-in"><a href='css.html'>css</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15591138637909.html">
-                
-                  <h1>js函数防抖与节流</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>最近在开发公司监控数据大屏的时候需要解决自适应的问题，虽然布局和字体等自适应已经通过rem实现，但数据图表的重绘只能依靠js。</p>
-
-<p>测试的时候需要通过鼠标不断改变浏览器窗口大小来观察大屏的自适应效果，窗口大小变化时，需要在window.onresize的回调函数中调用图表的重绘函数。</p>
-
-<p>在实际测试时发现，window.onresize的触发过于灵敏，大家可以在页面中加入以下代码，然后改变窗口大小来观察控制台的输出：</p>
-
-<pre><code class="language-javascript">window.onresize = reDraw;
-function reDraw(){
-    console.log(&quot;width:&quot;, window.innerWidth, &quot;,height:&quot;, window.innerHeight);
-}
-</code></pre>
-
-<p>感觉上只拖动了一下鼠标，但实际上已经触发了很多次，因此回调函数中的代码都将执行同样多的次数，显然这是不合理的，会造成不必要的性能开销。</p>
-
-<p>类似的场景还有鼠标滚动时触发onscroll事件、鼠标滑过时触发onmouseover事件等，这些场景中我们希望在事件触发时调用一些函数，但是又不希望函数被过于频繁地调用，这时候就需要用到防抖或是节流的操作。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15591138637909.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/5/29</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='javascript.html'>javascript</a></span>
           				   
                   </div>
                   <div class="more-right right">

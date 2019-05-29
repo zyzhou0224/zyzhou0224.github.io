@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
     
-  zyzhou0224.github.io
+  js函数防抖与节流 - zyzhou0224.github.io
   
   </title>
   
@@ -93,69 +93,36 @@
        
 
  <script type="text/javascript">
-	$(function(){
-		$('#menu_item_index').addClass('is_active');
-	});
+  $(function(){
+    $('#menu_item_index').addClass('is_active');
+  });
 </script>
 <div class="row">
-	<div class="large-8 medium-8 columns">
-		<div class="markdown-body home-categories">
-		
-			<div class="article">
-                <a class="clearlink" href="15591144622778.html">
-                
-                  <h1>css重排与重绘</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>最近在做可视化大屏，项目涉及很多动画效果。</p>
+  <div class="large-8 medium-8 columns">
+      <div class="markdown-body article-wrap">
+       <div class="article">
+          
+          <h1>js函数防抖与节流</h1>
+     
+        <div class="read-more clearfix">
+          <span class="date">2019/5/29</span>
 
-<p>同时临近年底，各种冲月活的业务需求接踵而至，组内负责的H5页面也有很多动画需要绘制。</p>
+          <span>posted in&nbsp;</span> 
+          
+              <span class="posted-in"><a href='javascript.html'>javascript</a></span>
+           
+         
+          <span class="comments">
+            
 
-<p>也许大家也会遇到类似的场景：</p>
+            
+          </span>
 
-<p>需要实现一个不太复杂的动画效果，想着用css应该最为流畅，然而事实上确会感觉卡顿。</p>
+        </div>
+      </div><!-- article -->
 
-<p>因为在动画作用的同时，还可能有正在获取数据的ajax请求或其他操作。</p>
-
-<p>动画可能会触发页面的重绘，主线程需要消耗资源来进行重绘，而由于js的单线程机制，无法同时进行重绘和ajax请求等操作，于是动画就会出现卡顿感。</p>
-
-<p>本文将重点介绍重排与重绘的概念。</p>
-
-
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15591144622778.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/5/29</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='css.html'>css</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
-
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-			<div class="article">
-                <a class="clearlink" href="15591138637909.html">
-                
-                  <h1>js函数防抖与节流</h1>
-                  <div class="a-content">
-                      
-                      <div class="a-content-text">
-                        
-                        	<p>最近在开发公司监控数据大屏的时候需要解决自适应的问题，虽然布局和字体等自适应已经通过rem实现，但数据图表的重绘只能依靠js。</p>
+      <div class="article-content">
+      <p>最近在开发公司监控数据大屏的时候需要解决自适应的问题，虽然布局和字体等自适应已经通过rem实现，但数据图表的重绘只能依靠js。</p>
 
 <p>测试的时候需要通过鼠标不断改变浏览器窗口大小来观察大屏的自适应效果，窗口大小变化时，需要在window.onresize的回调函数中调用图表的重绘函数。</p>
 
@@ -171,47 +138,107 @@ function reDraw(){
 
 <p>类似的场景还有鼠标滚动时触发onscroll事件、鼠标滑过时触发onmouseover事件等，这些场景中我们希望在事件触发时调用一些函数，但是又不希望函数被过于频繁地调用，这时候就需要用到防抖或是节流的操作。</p>
 
+<span id="more"></span><!-- more -->
 
-                        
-                      </div>
-                  </div>
-                </a>
-                <div class="read-more clearfix">
-                  <div class="more-left left">
-                   <a href="15591138637909.html">Read more</a>&nbsp;&nbsp; 
-                    <span class="date">2019/5/29</span>
-                    <span>posted in&nbsp;</span> 
-          				  
-          					    <span class="posted-in"><a href='javascript.html'>javascript</a></span>
-          				   
-                  </div>
-                  <div class="more-right right">
-                  <span class="comments">
-                      
+<h2 id="toc_0">函数防抖</h2>
 
-                       
-                  </span>
-                  </div>
-                </div>
-              </div><!-- article -->
-        
-              
+<p><strong>函数防抖指的是：触发事件后在 n 秒内函数只能执行一次，如果在 n 秒内又触发了事件，则会重新计算函数执行时间</strong>。</p>
+
+<p>在本文的场景下，解决思路是在触发window.onresize时，设定一个定时器，在0.2秒后执行目标函数，若0.2秒内window.onresize再次被触发，则取消原定时器并重新定时。</p>
+
+<p>首先实现函数防抖：</p>
+
+<pre><code class="language-javascript">function debounce(func, wait) {
+    var timer;
+    return function () {
+        let context = this;
+        let args = arguments;
+        if (timer) 
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+            func.apply(context, args)
+        }, wait);
+    }
+}
+</code></pre>
+
+<p>然后在触发事件时将需要调用的函数传入debounce：</p>
+
+<pre><code class="language-javascript">window.onresize = debounce(reDraw, 200);
+</code></pre>
+
+<p>此时再改变窗口大小，发现reDraw几乎只有在鼠标缩放窗口这一操作结束时才会被调用。</p>
+
+<h2 id="toc_1">函数节流</h2>
+
+<p>下面谈一谈另一个类似的概念：函数节流。</p>
+
+<p><strong>函数节流指的是，规定在一个单位时间内，无论事件被触发了多少次，其回调函数只能执行一次。</strong></p>
+
+<p>节流的实现如下：</p>
+
+<pre><code class="language-javascript">function throttle(func, wait) {
+    var timer;
+    return function() {
+        let context = this;
+        let args = arguments;
+        if (!timer) {
+            timer = setTimeout(function(){
+                timer = null;
+                func.apply(context, args)
+            }, wait)
+        }
+    }
+}
+</code></pre>
+
+<p>然后在触发事件时将需要调用的函数传入throttle：</p>
+
+<pre><code class="language-javascript">window.onresize = throttle(reDraw, 1000);
+</code></pre>
+
+<p>此时再改变窗口大小，发现reDraw以约1秒一次的频率在执行。</p>
+
+<p>防抖与节流的不同之处在于，防抖在事件被触发后将会重新计时，而节流稀释了函数执行的频率。</p>
+
+<p>举个例子，仍然指定onresize事件触发时调用debounce(reDraw, 200)，此时若保持以快于0.2秒/次的速度不断触发onresize，则reDraw将一直不会被调用，因为每次计时还没到0.2秒时，定时器被取消并重新计时。</p>
+
+<p>若指定onresize事件触发时调用throttle(reDraw, 200)，仍然保持以快于0.2秒/次的速度不断触发onresize，那么reDraw将会按约0.2秒/次的频率不断被调用。</p>
 
 
-			<div class="row">
-			  <div class="large-6 columns">
-			  <p class="text-left" style="padding-top:25px;">
-			   
-			  </p>
-			  </div>
-			  <div class="large-6 columns">
-			<p class="text-right" style="padding-top:25px;">
-			
-			</p>
-			  </div>
-			</div>
-		</div>
-	</div><!-- large 8 -->
+    
+
+      </div>
+
+      <div class="row">
+        <div class="large-6 columns">
+        <p class="text-left" style="padding:15px 0px;">
+      
+          <a href="15591144622778.html" 
+          title="Previous Post: css重排与重绘">&laquo; css重排与重绘</a>
+      
+        </p>
+        </div>
+        <div class="large-6 columns">
+      <p class="text-right" style="padding:15px 0px;">
+      
+      </p>
+        </div>
+      </div>
+      <div class="comments-wrap">
+        <div class="share-comments">
+          
+
+          
+
+          
+        </div>
+      </div>
+    </div><!-- article-wrap -->
+  </div><!-- large 8 -->
+
+
+
 
  <div class="large-4 medium-4 columns">
   <div class="hide-for-small">
